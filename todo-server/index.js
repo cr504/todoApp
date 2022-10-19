@@ -21,26 +21,6 @@ const PORT = process.env.PORT || 3000
 
 /*
 
-app.post('/task/edit/:taskId', (req, res) => {
-    const taskId = parseInt(req.params.taskId)
-    const listId = parseInt(req.body.listId)
-    const editedTask = {
-        taskId: taskId,
-        listId: listId,
-        description: req.body.description,
-        dueDate: req.body.dueDate,
-        priority: req.body.priority,
-        isComplete: req.body.isComplete,
-    }
-    tasks = tasks.map((task) => {
-        if (task.listId === listId && task.taskId === taskId) {
-            return editedTask
-        }
-        return task
-    })
-    return res.status(200).send(tasks)
-})
-
 app.get('/task/delete/:taskId', (req, res) => {
     const taskId = req.params.taskId
     tasks = tasks.filter(task => task.taskId !== parseInt(taskId))

@@ -11,11 +11,27 @@ class TaskController {
    * @params {*} body
    */
   _addNewTask(listId, body) {
-    try {      
-      const tasks = this.tasksModel._addNewTask(listId, body);      
+    try {
+      const tasks = this.tasksModel._addNewTask(listId, body);
       return tasks;
     } catch (error) {
       const errorMsg = `taskController: _addNewTask failed ${error}`;
+      console.log(errorMsg);
+      res.status(500).send(errorMsg);
+    }
+  }
+
+  /**
+   * Edits a task in the tasks array
+   * @params {*} taskId
+   * @params {*} body
+   */
+  _editTask(taskId, body) {
+    try {
+      const tasks = this.tasksModel._editTask(taskId, body);
+      return tasks;
+    } catch (error) {
+      const errorMsg = `taskController: _editTask failed ${error}`;
       console.log(errorMsg);
       res.status(500).send(errorMsg);
     }

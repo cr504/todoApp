@@ -24,7 +24,7 @@ class TasksModel {
         isComplete: false,
       },
       {
-        taskId: 2,
+        taskId: 3,
         listId: 2,
         description: "Description of task 1 listID 2",
         dueDate: Date.now(),
@@ -50,13 +50,16 @@ class TasksModel {
 
   /**
    * Gets all tasks after the new task has been added
+   * @params {*} listId
+   * @params {*} body
    */
   _addNewTask(listId, body) {
     try {
       const taskName = body.description;
       let tasks = this._getAllTasks();
       const newTaskId = tasks.length + 1;
-      const isComplete = body.isComplete.toLowerCase() === 'false' ? false : true;
+      const isComplete =
+        body.isComplete.toLowerCase() === "false" ? false : true;
       const newTask = {
         taskId: newTaskId,
         listId: parseInt(listId),
@@ -69,6 +72,43 @@ class TasksModel {
       return tasks;
     } catch (error) {
       const errorMsg = `Tasks-Model: GET _addNewTask failed ${error}`;
+      console.log(errorMsg);
+      res.status(500).send(errorMsg);
+    }
+  }
+
+  /**
+   * Gets the edited task
+   * @params {*} taskId
+   * @params {*} body
+   */
+  _editTask(taskId, body) {
+    try {
+      const taskName = body.description;
+      let tasks = this._getAllTasks();
+      const _taskId = taskId;
+      const _listId = parseInt(body.listId);
+      const _isComplete =
+        body.isComplete.toLowerCase() === "false" ? false : true;
+
+      const editedTask = {
+        taskId: _taskId,
+        listId: _listId,
+        description: body.description,
+        dueDate: body.dueDate,
+        priority: body.priority,
+        isComplete: _isComplete,
+      };
+      tasks = tasks.map((task) => {
+        // Update the tasks array with the edited task if it's found
+        if (task.listId === _listId && task.taskId === taskId) {
+          return editedTask;
+        }
+        return task;
+      }); 
+      return tasks;           
+    } catch (error) {
+      const errorMsg = `Tasks-Model: GET _editTask failed ${error}`;
       console.log(errorMsg);
       res.status(500).send(errorMsg);
     }

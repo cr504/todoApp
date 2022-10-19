@@ -17,4 +17,18 @@ router.get("/task/add/:listId", (req, res) => {
   }
 });
 
+router.post("/task/edit/:taskId", (req, res) => {
+  try {
+    const taskController = new TaskController();
+    const taskId = parseInt(req.params.taskId);
+    const reqBody = req.body;
+    const tasks = taskController._editTask(taskId, reqBody);
+    return res.status(200).send(tasks);
+  } catch (error) {
+    const errorMsg = `server: GET task/edit/:taskId failed ${error}`;
+    console.log(errorMsg);
+    res.status(500).send(errorMsg);
+  }
+});
+
 module.exports = router;
