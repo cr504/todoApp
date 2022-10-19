@@ -19,6 +19,21 @@ router.get("/todo/:id", (req, res) => {
 });
 
 /**
+ * GET todos array after the todo object has been deleted from todos
+ */
+ router.get("/todo/delete/:listId", (req, res) => {
+    try {
+      const todoController = new TodoController();
+      const todo = todoController._deleteTodoById(req.params.listId);
+      return res.status(200).send( todo);
+    } catch (error) {
+      const errorMsg = `server: GET todo/delete/:listId failed ${error}`;
+      console.log(errorMsg);
+      res.status(500).send(errorMsg);
+    }
+  });
+
+/**
  * POST a todo object
  */
 router.post("/todo", (req, res) => {

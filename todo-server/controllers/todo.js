@@ -33,6 +33,27 @@ class TodoController {
     }
   }
 
+  /** Gets the totos array after a todo has been deleted
+   * @params {*} listId
+   * @returns todo object
+   */
+  _deleteTodoById(_listId) {
+    try {
+      let todos = this.todosModel._getTodosWTasks();
+      const listId = _listId;
+      // Filter out the todo associated with the listId
+      todos = todos.filter((todo) => todo.id !== parseInt(listId));
+      // Filter out the task associated with the listId
+      //TODO implement this! 
+      //tasks = tasks.filter((task) => task.listId !== parseInt(listId));
+      return todos;
+    } catch (error) {
+      const errorMsg = `todoController: _deleteTodoById failed ${error}`;
+      console.log(errorMsg);
+      res.status(500).send(errorMsg);
+    }
+  }
+
   /**
    * Adds a todo to the todos array
    * @params {*} newTodo
@@ -40,7 +61,7 @@ class TodoController {
    */
   _addTodo(newTodo) {
     try {
-      const todos = this.todosModel._addTodo(newTodo);      
+      const todos = this.todosModel._addTodo(newTodo);
       return todos;
     } catch (error) {
       const errorMsg = `todoController: _addTodo failed ${error}`;
