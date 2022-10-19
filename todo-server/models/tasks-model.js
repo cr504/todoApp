@@ -1,9 +1,9 @@
 class TasksModel {
   constructor() {
     const priority = {
-        HIGH: 1,
-        MEDIUM: 2,
-        LOW: 3
+        HIGH: "High",
+        MEDIUM: "Medium",
+        LOW: "Low"
     };
 
     this.tasks = [
