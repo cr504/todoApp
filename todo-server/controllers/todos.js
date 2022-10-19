@@ -1,32 +1,53 @@
-exports.getTodos = (req, res, next) => {
-    res.status(200).send({
-        id: 1,
-        title: "Cohen Interview Assignment from controller",
-      },)
-};
+class TodosController {
+  //constructor() {}
 
+  todos = [
+    {
+      id: 1,
+      title: "Groceries",
+    },
+    {
+      id: 2,
+      title: "Reading",
+    },
+  ];
 
-/*
-function getTodosWTasks() {
-    const todosWithTasks = todos.map((todo) => {
-        const todoTasks = tasks.filter((task) => task.listId === todo.id)
+  tasks = [];
+
+  /**
+   * Gets todos with tasks
+   * @returns 
+   */
+  getTodosWTasks() {
+    try {
+      const todosWithTasks = this.todos.map((todo) => {
+        const todoTasks = this.tasks.filter((task) => task.listId === todo.id);
         const numCompletedTasks = todoTasks.filter(
-            (todoTask) => todoTask.isComplete === true
-        ).length
+          (todoTask) => todoTask.isComplete === true
+        ).length;
 
-        todo.numCompleted = numCompletedTasks
+        todo.numCompleted = numCompletedTasks;
 
-        return { ...todo, tasks: todoTasks }
-    })
-    return todosWithTasks
+        return { ...todo, tasks: todoTasks };
+      });
+      return todosWithTasks;
+    } catch (error) {
+      console.log(`TodosController: getTodosWTasks failed`);
+    }
+  }
+
+  /**
+   * Gets a full list of todos
+   * @returns array of todo objects
+   */
+  getAllTodos() {
+    try {
+      const todosWTasks = this.getTodosWTasks();
+      return todosWTasks;
+    } catch (error) {
+        console.log(`TodosController: getAllTodos failed`);
+    }
+  }
 }
-*/
-/*
-const getTodos = (req, res, next) => {
-    //const todosWTasks = getTodosWTasks()
-    //res.status(200).send(todosWTasks);
-    res.status(200).send(todos);
-};
 
-module.exports = { getTodos};
-*/
+module.exports = TodosController;
