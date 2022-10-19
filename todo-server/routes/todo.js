@@ -21,26 +21,22 @@ router.get("/todo/:id", (req, res) => {
 /**
  * POST a todo object
  */
-/*
 router.post("/todo", (req, res) => {
   try {
     const todoController = new TodoController();
     const title = req.body.title;
-    const id = todos.length + 1;
+    const id = todoController._getTodosLength() + 1;
     const newTodo = {
       id: id,
       title: title,
     };
-    todoController.addTodo(newTodo);
+    const todos = todoController._addTodo(newTodo);
+    return res.status(200).send(todos);
   } catch (error) {
     const errorMsg = `server: POST todo failed ${error}`;
     console.log(errorMsg);
     res.status(500).send(errorMsg);
-  }
-
-  //todos.push(newTodo)
-  //return res.status(200).send(todos)
+  }  
 });
-*/
 
 module.exports = router;

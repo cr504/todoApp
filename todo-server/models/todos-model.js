@@ -49,12 +49,27 @@ class TodosModel {
         ).length;
 
         todo.numCompleted = numCompletedTasks;
- 
+
         return { ...todo, tasks: todoTasks };
       });
       return todosWithTasks;
     } catch (error) {
       const errorMsg = `Todos-Model: GET _getTodosWTasks failed ${error}`;
+      console.log(errorMsg);
+      res.status(500).send(errorMsg);
+    }
+  }
+
+  /**
+   * Adds a todo to todos array
+   * @params {*} newTodo
+   */
+  _addTodo(newTodo) {
+    try {
+      this.todos.push(newTodo);
+      return this.todos;
+    } catch (error) {
+      const errorMsg = `Todos-Model: POST _addTodo failed ${error}`;
       console.log(errorMsg);
       res.status(500).send(errorMsg);
     }
