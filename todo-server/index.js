@@ -21,21 +21,6 @@ const PORT = process.env.PORT || 3000
 
 /*
 
-app.post('/task/add/:listId', (req, res) => {
-   const taskName = req.body.description
-    const newTaskId = tasks.length + 1
-    const newTask = {
-        taskId: newTaskId,
-        listId: parseInt(req.params.listId),
-        description: req.body.description,
-        dueDate: req.body.dueDate,
-        priority: req.body.priority,
-        isComplete: req.body.isComplete,
-    }
-    tasks.push(newTask)
-    return res.status(200).send(tasks)
-})
-
 app.post('/task/edit/:taskId', (req, res) => {
     const taskId = parseInt(req.params.taskId)
     const listId = parseInt(req.body.listId)
