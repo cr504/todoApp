@@ -1,12 +1,15 @@
 const TodosModel = require('../models/todos-model');
+const TasksModel = require('../models/tasks-model');
 
 class TodosController {
   constructor() {
     const todosModel = new TodosModel();
+    const tasksModel = new TasksModel();
     this.todos = todosModel.todos;
+    this.tasks = tasksModel.tasks;
   }
 
-  tasks = [];
+  //tasks = [];
 
   /**
    * Gets todos with tasks
