@@ -1,5 +1,5 @@
 const TodosModel = require("../models/todos-model");
-const TasksModel = require('../models/tasks-model');
+const TasksModel = require("../models/tasks-model");
 
 class TodoController {
   constructor() {
@@ -14,7 +14,11 @@ class TodoController {
     try {
       const todoLength = this.todosModel._getTodosWTasks().length;
       return todoLength;
-    } catch (error) {}
+    } catch (error) {
+      const errorMsg = `todoController: _getTodosLength failed ${error}`;
+      console.log(errorMsg);
+      res.status(500).send(errorMsg);
+    }
   }
 
   /**
@@ -45,7 +49,7 @@ class TodoController {
       const listId = _listId;
       // Filter out the todos associated with the listId
       todos = todos.filter((todo) => todo.id !== parseInt(listId));
-      // Filter out the tasks associated with the listId      
+      // Filter out the tasks associated with the listId
       tasks = tasks.filter((task) => task.listId !== parseInt(listId));
       return todos;
     } catch (error) {

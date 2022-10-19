@@ -3,17 +3,19 @@ const bodyParser = require('body-parser')
 const cors = require('cors')
 const app = express()
 
+const todos = require('./routes/todos');
+const todo = require('./routes/todo');
+const task = require('./routes/task');
+
 app.use(cors())
 app.use(bodyParser.json())
 app.use(express.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 
-const todos = require('./routes/todos');
-const todo = require('./routes/todo');
-
 // Base routes
 app.use('/', todos);
 app.use('/', todo);
+app.use('/', task);
 
 const PORT = process.env.PORT || 3000
 
