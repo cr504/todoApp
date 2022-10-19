@@ -30,19 +30,6 @@ const PORT = process.env.PORT || 3000
 
 /*
 
-// adds a todo
-app.post('/todo', (req, res) => {
-    const title = req.body.title
-    const id = todos.length + 1
-    const newTodo = {
-        id: id,
-        title: title,
-    }
-
-    todos.push(newTodo)
-    return res.status(200).send(todos)
-})
-
 app.get('/todo/delete/:listId', (req, res) => {
     const listId = req.params.listId
     todos = todos.filter(todo => todo.id !== parseInt(listId))
