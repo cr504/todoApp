@@ -30,13 +30,6 @@ const PORT = process.env.PORT || 3000
 
 /*
 
-app.get('/todo/delete/:listId', (req, res) => {
-    const listId = req.params.listId
-    todos = todos.filter(todo => todo.id !== parseInt(listId))
-    tasks = tasks.filter(task => task.listId !== parseInt(listId))
-    return res.status(200).send(todos)
-})
-
 app.post('/task/add/:listId', (req, res) => {
    const taskName = req.body.description
     const newTaskId = tasks.length + 1
