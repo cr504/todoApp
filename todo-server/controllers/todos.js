@@ -1,36 +1,11 @@
-const TodosModel = require('../models/todos-model');
-const TasksModel = require('../models/tasks-model');
+const TodosModel = require("../models/todos-model");
+//const TasksModel = require('../models/tasks-model');
 
 class TodosController {
   constructor() {
-    const todosModel = new TodosModel();
-    const tasksModel = new TasksModel();
-    this.todos = todosModel.todos;
-    this.tasks = tasksModel.tasks;
-  }
-
-  //tasks = [];
-
-  /**
-   * Gets todos with tasks
-   * @returns 
-   */
-  getTodosWTasks() {
-    try {
-      const todosWithTasks = this.todos.map((todo) => {
-        const todoTasks = this.tasks.filter((task) => task.listId === todo.id);
-        const numCompletedTasks = todoTasks.filter(
-          (todoTask) => todoTask.isComplete === true
-        ).length;
-
-        todo.numCompleted = numCompletedTasks;
-
-        return { ...todo, tasks: todoTasks };
-      });
-      return todosWithTasks;
-    } catch (error) {
-      console.log(`TodosController: getTodosWTasks failed`);
-    }
+    this.todosModel = new TodosModel();
+    //const tasksModel = new TasksModel();
+    //this.tasks = tasksModel.tasks;
   }
 
   /**
@@ -39,10 +14,12 @@ class TodosController {
    */
   getAllTodos() {
     try {
-      const todosWTasks = this.getTodosWTasks();
+      const todosWTasks = this.todosModel.getTodosWTasks();
       return todosWTasks;
     } catch (error) {
-        console.log(`TodosController: getAllTodos failed`);
+      const errorMsg = `server: GET getAllTodos failed ${error}`;
+      console.log(errorMsg);
+      res.status(500).send(errorMsg);      
     }
   }
 }
