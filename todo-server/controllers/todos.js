@@ -14,7 +14,7 @@ class TodosController {
    */
   getAllTodos() {
     try {
-      const todosWTasks = this.todosModel.getTodosWTasks();
+      const todosWTasks = this.todosModel._getTodosWTasks();
       return todosWTasks;
     } catch (error) {
       const errorMsg = `server: GET getAllTodos failed ${error}`;

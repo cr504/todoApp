@@ -40,7 +40,7 @@ class TodosModel {
    * Gets todos with tasks
    * @returns
    */
-  getTodosWTasks() {
+  _getTodosWTasks() {
     try {
       const todosWithTasks = this.todos.map((todo) => {
         const todoTasks = this.tasks.filter((task) => task.listId === todo.id);
@@ -49,12 +49,12 @@ class TodosModel {
         ).length;
 
         todo.numCompleted = numCompletedTasks;
-
+ 
         return { ...todo, tasks: todoTasks };
       });
       return todosWithTasks;
     } catch (error) {
-      const errorMsg = `Todos-Model: GET getTodosWTasks failed ${error}`;
+      const errorMsg = `Todos-Model: GET _getTodosWTasks failed ${error}`;
       console.log(errorMsg);
       res.status(500).send(errorMsg);
     }
