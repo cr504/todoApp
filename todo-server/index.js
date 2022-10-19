@@ -15,17 +15,6 @@ const todo = require('./routes/todo');
 app.use('/', todos);
 app.use('/', todo);
 
-/*
-let todos = [
-    {
-        id: 1,
-        title: 'Cohen Interview Assignment',
-    },
-]
-*/
-
-let tasks = []
-
 const PORT = process.env.PORT || 3000
 
 /*
