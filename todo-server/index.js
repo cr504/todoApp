@@ -27,31 +27,12 @@ let tasks = []
 const PORT = process.env.PORT || 3000
 
 /*
-function getTodosWTasks() {
-    const todosWithTasks = todos.map((todo) => {
-        const todoTasks = tasks.filter((task) => task.listId === todo.id)
-        const numCompletedTasks = todoTasks.filter(
-            (todoTask) => todoTask.isComplete === true
-        ).length
-
-        todo.numCompleted = numCompletedTasks
-
-        return { ...todo, tasks: todoTasks }
-    })
-    return todosWithTasks
-}
 
 function getTodoById(_id) {
     const todos = getTodosWTasks()
     const todo = todos.filter((todo) => todo.id === parseInt(_id))
     return todo
 }
-
-// gets full list of todos
-app.get('/todos', (req, res) => {
-    const todosWTasks = getTodosWTasks()
-    return res.status(200).send(todosWTasks)
-})
 
 // gets a todo
 app.get('/todo/:id', (req, res) => {

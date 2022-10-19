@@ -1,16 +1,10 @@
-class TodosController {
-  //constructor() {}
+const TodosModel = require('../models/todos-model');
 
-  todos = [
-    {
-      id: 1,
-      title: "Groceries",
-    },
-    {
-      id: 2,
-      title: "Reading",
-    },
-  ];
+class TodosController {
+  constructor() {
+    const todosModel = new TodosModel();
+    this.todos = todosModel.todos;
+  }
 
   tasks = [];
 
