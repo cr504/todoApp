@@ -78,6 +78,21 @@ class TasksModel {
   }
 
   /**
+   * @params {*} taskId
+   */
+  _deleteTaskByTaskId(taskId) {
+    try {
+      let tasks = this._getAllTasks();
+      tasks = tasks.filter((task) => task.taskId !== taskId);
+      return tasks;
+    } catch (error) {
+      const errorMsg = `Tasks-Model: GET _deleteTaskByTaskId failed ${error}`;
+      console.log(errorMsg);
+      res.status(500).send(errorMsg);
+    }
+  }
+
+  /**
    * Gets the edited task
    * @params {*} taskId
    * @params {*} body
@@ -105,8 +120,8 @@ class TasksModel {
           return editedTask;
         }
         return task;
-      }); 
-      return tasks;           
+      });
+      return tasks;
     } catch (error) {
       const errorMsg = `Tasks-Model: GET _editTask failed ${error}`;
       console.log(errorMsg);

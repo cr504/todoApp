@@ -19,13 +19,4 @@ app.use('/', task);
 
 const PORT = process.env.PORT || 3000
 
-/*
-
-app.get('/task/delete/:taskId', (req, res) => {
-    const taskId = req.params.taskId
-    tasks = tasks.filter(task => task.taskId !== parseInt(taskId))
-    return res.status(200).send(tasks)
-})
-*/
-
 app.listen(PORT, () => console.log(`Example app listening on port ${PORT}!`))

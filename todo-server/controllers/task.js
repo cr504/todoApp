@@ -22,6 +22,21 @@ class TaskController {
   }
 
   /**
+   * Deletes a task from the tasks array
+   * @params {*} taskId
+   */
+  _deleteTaskByTaskId(taskId) {
+    try {
+      const tasks = this.tasksModel._deleteTaskByTaskId(taskId);
+      return tasks;
+    } catch (error) {
+      const errorMsg = `taskController: _deleteTaskByTaskId failed ${error}`;
+      console.log(errorMsg);
+      res.status(500).send(errorMsg);
+    }
+  }
+
+  /**
    * Edits a task in the tasks array
    * @params {*} taskId
    * @params {*} body
