@@ -9,9 +9,11 @@ app.use(express.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 
 const todos = require('./routes/todos');
+const todo = require('./routes/todo');
 
 // Base routes
 app.use('/', todos);
+app.use('/', todo);
 
 /*
 let todos = [
@@ -27,18 +29,6 @@ let tasks = []
 const PORT = process.env.PORT || 3000
 
 /*
-
-function getTodoById(_id) {
-    const todos = getTodosWTasks()
-    const todo = todos.filter((todo) => todo.id === parseInt(_id))
-    return todo
-}
-
-// gets a todo
-app.get('/todo/:id', (req, res) => {
-    const todo = getTodoById(req.params.id)
-    return res.status(200).send(todo)
-})
 
 // adds a todo
 app.post('/todo', (req, res) => {
