@@ -1,9 +1,10 @@
 const TodosModel = require("../models/todos-model");
-//const TasksModel = require('../models/tasks-model');
+const TasksModel = require('../models/tasks-model');
 
 class TodoController {
   constructor() {
     this.todosModel = new TodosModel();
+    this.tasksModel = new TasksModel();
   }
 
   /**
@@ -40,12 +41,12 @@ class TodoController {
   _deleteTodoById(_listId) {
     try {
       let todos = this.todosModel._getTodosWTasks();
+      let tasks = this.tasksModel._getAllTasks();
       const listId = _listId;
-      // Filter out the todo associated with the listId
+      // Filter out the todos associated with the listId
       todos = todos.filter((todo) => todo.id !== parseInt(listId));
-      // Filter out the task associated with the listId
-      //TODO implement this! 
-      //tasks = tasks.filter((task) => task.listId !== parseInt(listId));
+      // Filter out the tasks associated with the listId      
+      tasks = tasks.filter((task) => task.listId !== parseInt(listId));
       return todos;
     } catch (error) {
       const errorMsg = `todoController: _deleteTodoById failed ${error}`;
