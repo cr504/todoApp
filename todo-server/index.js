@@ -8,17 +8,25 @@ app.use(bodyParser.json())
 app.use(express.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 
+const todos = require('./routes/todos');
+
+// Base routes
+app.use('/', todos);
+
+/*
 let todos = [
     {
         id: 1,
         title: 'Cohen Interview Assignment',
     },
 ]
+*/
 
 let tasks = []
 
 const PORT = process.env.PORT || 3000
 
+/*
 function getTodosWTasks() {
     const todosWithTasks = todos.map((todo) => {
         const todoTasks = tasks.filter((task) => task.listId === todo.id)
@@ -111,5 +119,6 @@ app.get('/task/delete/:taskId', (req, res) => {
     tasks = tasks.filter(task => task.taskId !== parseInt(taskId))
     return res.status(200).send(tasks)
 })
+*/
 
 app.listen(PORT, () => console.log(`Example app listening on port ${PORT}!`))
