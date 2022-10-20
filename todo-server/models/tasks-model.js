@@ -1,46 +1,17 @@
-class TasksModel {
-  constructor() {
-    const priority = {
-      HIGH: "High",
-      MEDIUM: "Medium",
-      LOW: "Low",
-    };
+const fs = require("fs");
+const taskDataFilePath = process.cwd() + "\\todo-server\\data\\tasks.json";
 
-    this.tasks = [
-      {
-        taskId: 1,
-        listId: 1,
-        description: "Description of task 1 listID 1",
-        dueDate: Date.now(),
-        priority: priority.HIGH,
-        isComplete: true,
-      },
-      {
-        taskId: 2,
-        listId: 1,
-        description: "Description of task 2 listID 1",
-        dueDate: Date.now(),
-        priority: priority.LOW,
-        isComplete: false,
-      },
-      {
-        taskId: 3,
-        listId: 2,
-        description: "Description of task 1 listID 2",
-        dueDate: Date.now(),
-        priority: priority.LOW,
-        isComplete: false,
-      },
-    ];
-  }
+class TasksModel {
+  constructor() {}
 
   /**
    * Gets all tasks in the tasks array
    */
   _getAllTasks() {
     try {
-      const allTasks = this.tasks;
-      return allTasks;
+      // read taskData from file
+      const _tasksData = this._getTasksDataFromFile();
+      return _tasksData;
     } catch (error) {
       const errorMsg = `Tasks-Model: GET _getAllTasks failed ${error}`;
       console.log(errorMsg);
@@ -69,6 +40,8 @@ class TasksModel {
         isComplete: isComplete,
       };
       tasks.push(newTask);
+      // Save the tasks data to file
+      this._saveToFile(tasks);
       return tasks;
     } catch (error) {
       const errorMsg = `Tasks-Model: GET _addNewTask failed ${error}`;
@@ -84,6 +57,8 @@ class TasksModel {
     try {
       let tasks = this._getAllTasks();
       tasks = tasks.filter((task) => task.taskId !== taskId);
+      // Save the tasks data to file
+      this._saveToFile(tasks);
       return tasks;
     } catch (error) {
       const errorMsg = `Tasks-Model: GET _deleteTaskByTaskId failed ${error}`;
@@ -121,9 +96,38 @@ class TasksModel {
         }
         return task;
       });
+      // Save the tasks data to file
+      this._saveToFile(tasks);
       return tasks;
     } catch (error) {
       const errorMsg = `Tasks-Model: GET _editTask failed ${error}`;
+      console.log(errorMsg);
+      res.status(500).send(errorMsg);
+    }
+  }
+
+  /**
+   * Gets tasksData from file
+   */
+  _getTasksDataFromFile() {
+    try {
+      return JSON.parse(fs.readFileSync(taskDataFilePath, "utf-8"));
+    } catch (error) {
+      const errorMsg = `Tasks-Model: _getTasksDataFromFile failed ${error}`;
+      console.log(errorMsg);
+      res.status(500).send(errorMsg);
+    }
+  }
+
+  /**
+   * Saves a task to file
+   * @params {*} tasks
+   */
+  _saveToFile(tasks) {
+    try {
+      fs.writeFileSync(taskDataFilePath, JSON.stringify(tasks));
+    } catch (error) {
+      const errorMsg = `Tasks-Model: _saveToFile failed ${error}`;
       console.log(errorMsg);
       res.status(500).send(errorMsg);
     }
