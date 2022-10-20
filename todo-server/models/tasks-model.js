@@ -1,8 +1,9 @@
-const fs = require("fs");
-const taskDataFilePath = process.cwd() + "\\todo-server\\data\\tasks.json";
+const TasksDataService = require('../services/tasks-data-service');
 
 class TasksModel {
-  constructor() {}
+  constructor() {
+    this.tasksDataService = new TasksDataService();
+  }
 
   /**
    * Gets all tasks in the tasks array
@@ -10,7 +11,7 @@ class TasksModel {
   _getAllTasks() {
     try {
       // read taskData from file
-      const _tasksData = this._getTasksDataFromFile();
+      const _tasksData = this.tasksDataService._getTasksDataFromFile();
       return _tasksData;
     } catch (error) {
       const errorMsg = `Tasks-Model: GET _getAllTasks failed ${error}`;
@@ -41,7 +42,7 @@ class TasksModel {
       };
       tasks.push(newTask);
       // Save the tasks data to file
-      this._saveToFile(tasks);
+      this.tasksDataService._saveToFile(tasks);
       return tasks;
     } catch (error) {
       const errorMsg = `Tasks-Model: GET _addNewTask failed ${error}`;
@@ -58,7 +59,7 @@ class TasksModel {
       let tasks = this._getAllTasks();
       tasks = tasks.filter((task) => task.taskId !== taskId);
       // Save the tasks data to file
-      this._saveToFile(tasks);
+      this.tasksDataService._saveToFile(tasks);
       return tasks;
     } catch (error) {
       const errorMsg = `Tasks-Model: GET _deleteTaskByTaskId failed ${error}`;
@@ -97,37 +98,10 @@ class TasksModel {
         return task;
       });
       // Save the tasks data to file
-      this._saveToFile(tasks);
+      this.tasksDataService._saveToFile(tasks);
       return tasks;
     } catch (error) {
       const errorMsg = `Tasks-Model: GET _editTask failed ${error}`;
-      console.log(errorMsg);
-      res.status(500).send(errorMsg);
-    }
-  }
-
-  /**
-   * Gets tasksData from file
-   */
-  _getTasksDataFromFile() {
-    try {
-      return JSON.parse(fs.readFileSync(taskDataFilePath, "utf-8"));
-    } catch (error) {
-      const errorMsg = `Tasks-Model: _getTasksDataFromFile failed ${error}`;
-      console.log(errorMsg);
-      res.status(500).send(errorMsg);
-    }
-  }
-
-  /**
-   * Saves a task to file
-   * @params {*} tasks
-   */
-  _saveToFile(tasks) {
-    try {
-      fs.writeFileSync(taskDataFilePath, JSON.stringify(tasks));
-    } catch (error) {
-      const errorMsg = `Tasks-Model: _saveToFile failed ${error}`;
       console.log(errorMsg);
       res.status(500).send(errorMsg);
     }

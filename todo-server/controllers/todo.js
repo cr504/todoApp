@@ -1,10 +1,15 @@
 const TodosModel = require("../models/todos-model");
+const TodosDataService = require("../services/todos-data-service");
+
 const TasksModel = require("../models/tasks-model");
+const TasksDataService = require("../services/tasks-data-service");
 
 class TodoController {
   constructor() {
     this.todosModel = new TodosModel();
+    this.todosDataService = new TodosDataService();
     this.tasksModel = new TasksModel();
+    this.tasksDataService = new TasksDataService();
   }
 
   /**
@@ -49,8 +54,12 @@ class TodoController {
       const listId = _listId;
       // Filter out the todos associated with the listId
       todos = todos.filter((todo) => todo.id !== parseInt(listId));
+      // Save the new todos to file
+      this.todosDataService._saveToFile(todos);
       // Filter out the tasks associated with the listId
       tasks = tasks.filter((task) => task.listId !== parseInt(listId));
+      // Save new tasks to file
+      this.tasksDataService._saveToFile(tasks);
       return todos;
     } catch (error) {
       const errorMsg = `todoController: _deleteTodoById failed ${error}`;

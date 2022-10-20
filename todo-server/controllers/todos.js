@@ -3,9 +3,7 @@ const TodosModel = require("../models/todos-model");
 
 class TodosController {
   constructor() {
-    this.todosModel = new TodosModel();
-    //const tasksModel = new TasksModel();
-    //this.tasks = tasksModel.tasks;
+    this.todosModel = new TodosModel();    
   }
 
   /**
