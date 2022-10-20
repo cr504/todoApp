@@ -1,40 +1,8 @@
-class TodosModel {
-  constructor() {
-    const priority = {
-      HIGH: "High",
-      MEDIUM: "Medium",
-      LOW: "Low",
-    };
-    this.todos = [
-      {
-        id: 1,
-        title: "Groceries",
-      },
-      {
-        id: 2,
-        title: "Reading",
-      },
-    ];
+const fs = require("fs");
+const todosDataFilePath = process.cwd() + "\\todo-server\\data\\todos.json";
+const taskDataFilePath = process.cwd() + "\\todo-server\\data\\tasks.json";
 
-    this.tasks = [
-      {
-        taskId: 1,
-        listId: 1,
-        description: "Description of task 1",
-        dueDate: Date.now(),
-        priority: priority.HIGH,
-        isComplete: true,
-      },
-      {
-        taskId: 1,
-        listId: 2,
-        description: "Description of task 2",
-        dueDate: Date.now(),
-        priority: priority.LOW,
-        isComplete: true,
-      },
-    ];
-  }
+class TodosModel {
 
   /**
    * Gets todos with tasks
@@ -42,8 +10,10 @@ class TodosModel {
    */
   _getTodosWTasks() {
     try {
-      const todosWithTasks = this.todos.map((todo) => {
-        const todoTasks = this.tasks.filter((task) => task.listId === todo.id);
+      const _todosData = this._getTodosDataFromFile();
+      const _tasksData = this._getTasksDataFromFile();
+      const todosWithTasks = _todosData.map((todo) => {
+        const todoTasks = _tasksData.filter((task) => task.listId === todo.id);
         const numCompletedTasks = todoTasks.filter(
           (todoTask) => todoTask.isComplete === true
         ).length;
@@ -66,10 +36,52 @@ class TodosModel {
    */
   _addTodo(newTodo) {
     try {
-      this.todos.push(newTodo);
-      return this.todos;
+      const _todosData = this._getTodosDataFromFile();
+      _todosData.push(newTodo);
+      this._saveTodoToFile(_todosData);
+      return _todosData;
     } catch (error) {
       const errorMsg = `Todos-Model: POST _addTodo failed ${error}`;
+      console.log(errorMsg);
+      res.status(500).send(errorMsg);
+    }
+  }
+
+  /**
+   * Gets todosData from file
+   */
+  _getTodosDataFromFile() {
+    try {
+      return JSON.parse(fs.readFileSync(todosDataFilePath, "utf-8"));
+    } catch (error) {
+      const errorMsg = `Tasks-Model: _getTodosDataFromFile failed ${error}`;
+      console.log(errorMsg);
+      res.status(500).send(errorMsg);
+    }
+  }
+
+   /**
+   * Gets tasksData from file
+   */
+    _getTasksDataFromFile() {
+      try {
+        return JSON.parse(fs.readFileSync(taskDataFilePath, "utf-8"));
+      } catch (error) {
+        const errorMsg = `Tasks-Model: _getTasksDataFromFile failed ${error}`;
+        console.log(errorMsg);
+        res.status(500).send(errorMsg);
+      }
+    }
+
+    /**
+   * Saves a todo to file
+   * @params {*} tasks
+   */
+  _saveTodoToFile(todo) {
+    try {
+      fs.writeFileSync(todosDataFilePath, JSON.stringify(todo));
+    } catch (error) {
+      const errorMsg = `Tasks-Model: _saveToFile failed ${error}`;
       console.log(errorMsg);
       res.status(500).send(errorMsg);
     }
