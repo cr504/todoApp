@@ -1,15 +1,15 @@
 <template>
-  <hello-world />
+  <TodoComponent />
 </template>
 
-<script>
-  import HelloWorld from '../components/HelloWorld'
+<script>  
+import TodoComponent from '@/components/TodoComponent.vue';
 
   export default {
-    name: 'Home',
+    name: 'Todo',
 
-    components: {
-      HelloWorld,
-    },
+    components: {    
+    TodoComponent
+},
   }
 </script>
