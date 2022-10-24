@@ -52,6 +52,22 @@ class TasksModel {
   }
 
   /**
+   * Gets all tasks associated with a listId
+   * @params {*} listId
+   */
+   _getTasksByListId(listId) {
+    try {
+      let tasks = this._getAllTasks();
+      tasks = tasks.filter((task) => task.listId === listId);      
+      return tasks;
+    } catch (error) {
+      const errorMsg = `Tasks-Model: GET _getTasksByListId failed ${error}`;
+      console.log(errorMsg);
+      res.status(500).send(errorMsg);
+    }
+  }
+
+  /**
    * @params {*} taskId
    */
   _deleteTaskByTaskId(taskId) {

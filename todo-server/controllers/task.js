@@ -22,6 +22,21 @@ class TaskController {
   }
 
   /**
+   * Gets all tasks associated with a listId
+   * @params {*} listId   
+   */
+   _getTasksByListId(listId) {
+    try {
+      const tasks = this.tasksModel._getTasksByListId(listId);
+      return tasks;
+    } catch (error) {
+      const errorMsg = `taskController: _getTasksByListId failed ${error}`;
+      console.log(errorMsg);
+      res.status(500).send(errorMsg);
+    }
+  }
+
+  /**
    * Deletes a task from the tasks array
    * @params {*} taskId
    */

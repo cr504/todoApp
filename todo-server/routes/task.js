@@ -17,6 +17,19 @@ router.post("/task/add/:listId", (req, res) => {
   }
 });
 
+router.get("/task/:listId", (req, res) => {
+  try {
+    const taskController = new TaskController();
+    const listId = parseInt(req.params.listId);    
+    const tasks = taskController._getTasksByListId(listId);
+    return res.status(200).send(tasks);
+  } catch (error) {
+    const errorMsg = `server: GET task/:listId failed ${error}`;
+    console.log(errorMsg);
+    res.status(500).send(errorMsg);
+  }
+});
+
 router.get("/task/delete/:taskId", (req, res) => {
   try {
     const taskController = new TaskController();
