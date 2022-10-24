@@ -197,13 +197,13 @@
           this.tasks = [
             {
               description: 'Task 1',
-              dueDate: Date(),
+              dueDate: '10/19/22',
               priority: "High",
               isComplete: false,              
             },
             {
               description: 'Task 2',
-              dueDate: Date(),
+              dueDate: '10/19/22',
               priority: "Low",
               isComplete: false,              
             },      
