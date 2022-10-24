@@ -43,7 +43,8 @@ class TasksModel {
       tasks.push(newTask);
       // Save the tasks data to file
       this.tasksDataService._saveToFile(tasks);
-      return tasks;
+      const tasksByListId = tasks.filter(task => task.listId === listId);
+      return tasksByListId;
     } catch (error) {
       const errorMsg = `Tasks-Model: GET _addNewTask failed ${error}`;
       console.log(errorMsg);

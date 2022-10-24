@@ -132,7 +132,7 @@ export default {
     },
 
     methods: {
-        initialize() {
+        initialize() {            
             // Get all the tasks by id
             const getTasksPath = `${this.serverUrl}/task/${this.listId}`;
             axios.get(`${getTasksPath}`, {               
