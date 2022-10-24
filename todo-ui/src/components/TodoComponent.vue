@@ -64,10 +64,7 @@ import axios from 'axios';
   },
 
   methods: {    
-    addTodo() {
-      let newTodo = {        
-        title: this.newTodoTitle,        
-      }
+    addTodo() {      
       axios.post(`${this.baseUrl}/todo`, {
         title: this.newTodoTitle,
       })
