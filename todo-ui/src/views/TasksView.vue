@@ -1,5 +1,15 @@
 <template>
-  <div class="about">
-    <h1>This is an about page</h1>
-  </div>
+  <TaskComponent />
 </template>
+
+<script>  
+import TaskComponent from '@/components/TaskComponent.vue';
+
+  export default {
+    name: 'Task',
+
+    components: {    
+    TaskComponent
+},
+  }
+</script>
