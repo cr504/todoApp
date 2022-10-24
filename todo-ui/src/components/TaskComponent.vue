@@ -118,7 +118,7 @@
                 <v-spacer></v-spacer>
               </v-card-actions>
             </v-card>
-          </v-dialog>
+          </v-dialog>          
         </v-toolbar>
       </template>
       <template v-slot:item.actions="{ item }">
@@ -135,8 +135,8 @@
         >
           mdi-delete
         </v-icon>
-      </template>  
-    </v-data-table>
+      </template>      
+    </v-data-table> 
   </template>
     
     <script>

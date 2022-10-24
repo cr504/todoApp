@@ -12,7 +12,7 @@
           <template v-slot:default>     
             
             <v-list-item-content>
-              <v-list-item-title>{{todo.title}}</v-list-item-title>
+              <v-list-item-title><a href="http://localhost:8080/#/task">{{todo.title}}</a></v-list-item-title>
             </v-list-item-content>            
 
             <v-list-item-action>
