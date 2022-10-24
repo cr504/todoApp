@@ -45,6 +45,7 @@ import axios from 'axios';
   export default {    
     data() {
       return {
+        baseUrl: "http://localhost:3000",
         newTodoTitle: '', 
         todos: [],
         errors: []      
@@ -53,7 +54,7 @@ import axios from 'axios';
 
   created() {
     // Get all todos on created
-    axios.get(`http://localhost:3000/todos`)
+    axios.get(`${this.baseUrl}/todos`)
     .then(response => {
       this.todos = response.data
     })
@@ -64,12 +65,19 @@ import axios from 'axios';
 
   methods: {    
     addTodo() {
-      let newTodo = {
-        id: this.todos.length + 1,
+      let newTodo = {        
         title: this.newTodoTitle,        
       }
-      this.todos.push(newTodo)
-      this.newTodoTitle = ''
+      axios.post(`${this.baseUrl}/todo`, {
+        title: this.newTodoTitle,
+      })
+      .then(response => {
+        this.newTodoTitle = ''
+        this.todos = response.data
+      })
+      .catch(e => {
+        this.errors.push(e)
+      })                  
     },
 
     deleteTodo(id) {
