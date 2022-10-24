@@ -1,94 +1,259 @@
 <template>
-    <div>
-        <v-text-field
-        v-model="newTodoTitle"
-        @click:append="addTodo"
-        @keyup.enter="addTodo"
-        class="pa-3" outlined label="Add Task" 
-        append-icon="mdi-plus-thick" hide-details clearable></v-text-field>
-        <v-list v-if="todos.length" class="pt-0" flat>
-          <div v-for="todo in todos" :key="todo.id">
-            <v-list-item>
-              <template v-slot:default>     
-                
-                <v-list-item-content>
-                  <v-list-item-title>{{todo.title}}</v-list-item-title>
-                </v-list-item-content>            
-    
-                <v-list-item-action>
-                  <v-btn @click.stop="deleteTodo(todo.id, todo.title)" icon>
-                    <v-icon color="red">mdi-delete</v-icon>
-                  </v-btn>
-                </v-list-item-action>
-    
-              </template>
-            </v-list-item>
-            <v-divider></v-divider>
-          </div>
-        </v-list>
-        <div v-else
-        class="no-tasks">
-          <v-icon      
-          color="primary"
-          size="100"
+    <v-data-table    
+      :headers="headers"
+      :items="tasks"      
+      class="elevation-1"   
+      no-data-text="No tasks"   
+    >
+      <template v-slot:top>
+        <v-toolbar
+          flat
         >
-          mdi-check
+          <v-toolbar-title>Tasks</v-toolbar-title>
+          <v-divider
+            class="mx-4"
+            inset
+            vertical
+          ></v-divider>
+          <v-spacer></v-spacer>
+          <v-dialog
+            v-model="dialog"
+            max-width="500px"
+          >
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn
+                color="primary"
+                dark
+                class="mb-2"
+                v-bind="attrs"
+                v-on="on"
+              >
+                New Task
+              </v-btn>
+            </template>
+            <v-card>
+              <v-card-title>
+                <span class="text-h5">{{ formTitle }}</span>
+              </v-card-title>
+  
+              <v-card-text>
+                <v-container>
+                  <v-row>
+                    <v-col
+                      cols="12"
+                      sm="6"
+                      md="4"
+                    >
+                      <v-text-field
+                        v-model="editedItem.description"
+                        label="Description"
+                      ></v-text-field>
+                    </v-col>
+                    <v-col
+                      cols="12"
+                      sm="6"
+                      md="4"
+                    >
+                      <v-text-field
+                        v-model="editedItem.dueDate"
+                        label="Due Date"
+                      ></v-text-field>
+                    </v-col>
+                    <v-col
+                      cols="12"
+                      sm="6"
+                      md="4"
+                    >
+                      <v-text-field
+                        v-model="editedItem.priority"
+                        label="Priority"
+                      ></v-text-field>
+                    </v-col>
+                    <v-col
+                      cols="12"
+                      sm="6"
+                      md="4"
+                    >
+                      <v-text-field
+                        v-model="editedItem.isComplete"
+                        label="Complete"
+                      ></v-text-field>
+                    </v-col>
+                    <v-col
+                      cols="12"
+                      sm="6"
+                      md="4"
+                    >                 
+                    </v-col>
+                  </v-row>
+                </v-container>
+              </v-card-text>
+  
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn
+                  color="blue darken-1"
+                  text
+                  @click="close"
+                >
+                  Cancel
+                </v-btn>
+                <v-btn
+                  color="blue darken-1"
+                  text
+                  @click="save"
+                >
+                  Save
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+          <v-dialog v-model="dialogDelete" max-width="500px">
+            <v-card>
+              <v-card-title class="text-h5">Are you sure you want to delete this task?</v-card-title>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="blue darken-1" text @click="closeDelete">Cancel</v-btn>
+                <v-btn color="blue darken-1" text @click="deleteItemConfirm">OK</v-btn>
+                <v-spacer></v-spacer>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+        </v-toolbar>
+      </template>
+      <template v-slot:item.actions="{ item }">
+        <v-icon
+          small
+          class="mr-2"
+          @click="editItem(item)"
+        >
+          mdi-pencil
         </v-icon>
-          <div class="text-h5 primary--text">No tasks</div>
-        </div>
-      </div>
-    </template>
+        <v-icon
+          small
+          @click="deleteItem(item)"
+        >
+          mdi-delete
+        </v-icon>
+      </template>  
+    </v-data-table>
+  </template>
     
     <script>
-    import axios from 'axios';
-    
-      export default {    
-        data() {
-          return {
-            baseUrl: "http://localhost:3000",
-            newTodoTitle: '', 
-            todos: [],
-            errors: []      
-        }
-      },
-    
-      created() {
-        // Get all todos on created
-        axios.get(`${this.baseUrl}/todos`)
-        .then(response => {
-          this.todos = response.data
-        })
-        .catch(e => {
-          this.errors.push(e)
-        })    
-      },
-    
-      methods: {    
-        addTodo() {      
-          axios.post(`${this.baseUrl}/todo`, {
-            title: this.newTodoTitle,
-          })
-          .then(response => {
-            this.newTodoTitle = ''
-            this.todos = response.data
-          })
-          .catch(e => {
-            this.errors.push(e)
-          })                  
+    export default {
+      data: () => ({        
+        dialog: false,
+        listId: null,
+        dialogDelete: false,
+        headers: [
+          {
+            text: 'Description',
+            align: 'start',
+            sortable: false,
+            value: 'description',
+          },
+          { text: 'Due Date', value: 'dueDate' },
+          { text: 'Priority', value: 'priority' },
+          { text: 'Complete', value: 'isComplete' },          
+          { text: 'Actions', value: 'actions', sortable: false },
+        ],
+        tasks: [],
+        editedIndex: -1,
+        editedItem: {
+         description: '',
+          dueDate: null,
+          priority: "",
+          isComplete: null,          
         },
-    
-        deleteTodo(id, title) {
-          if (confirm(`Delete todo ${title}?`)) {
-            const deletePath = `${this.baseUrl}/todo/delete/${id}`;
-            axios.get(`${deletePath}`)
-            .then(response => {
-              this.todos = response.data
-            })        
-          }      
+        defaultItem: {
+        description: '',
+          dueDate: null,
+          priority: "",
+          isComplete: null,          
         },
-      }
+      }),
+  
+      computed: {
+        formTitle () {
+          return this.editedIndex === -1 ? 'New Task' : 'Edit Task'
+        },
+      },
+  
+      watch: {
+        dialog (val) {
+          val || this.close()
+        },
+        dialogDelete (val) {
+          val || this.closeDelete()
+        },
+      },
+  
+      created () {
+        this.initialize()
+      },
+  
+      methods: {
+        initialize () {
+          this.tasks = [
+            {
+              description: 'Task 1',
+              dueDate: Date(),
+              priority: "High",
+              isComplete: false,              
+            },
+            {
+              description: 'Task 2',
+              dueDate: Date(),
+              priority: "Low",
+              isComplete: false,              
+            },      
+          ]
+        },
+  
+        editItem (item) {
+          this.editedIndex = this.tasks.indexOf(item)
+          this.editedItem = Object.assign({}, item)
+          this.dialog = true
+        },
+  
+        deleteItem (item) {
+          this.editedIndex = this.tasks.indexOf(item)
+          this.editedItem = Object.assign({}, item)
+          this.dialogDelete = true
+        },
+  
+        deleteItemConfirm () {
+          this.tasks.splice(this.editedIndex, 1)
+          this.closeDelete()
+        },
+  
+        close () {
+          this.dialog = false
+          this.$nextTick(() => {
+            this.editedItem = Object.assign({}, this.defaultItem)
+            this.editedIndex = -1
+          })
+        },
+  
+        closeDelete () {
+          this.dialogDelete = false
+          this.$nextTick(() => {
+            this.editedItem = Object.assign({}, this.defaultItem)
+            this.editedIndex = -1
+          })
+        },
+  
+        save () {
+          if (this.editedIndex > -1) {
+            Object.assign(this.tasks[this.editedIndex], this.editedItem)
+          } else {
+            this.tasks.push(this.editedItem)
+          }
+          this.close()
+        },
+      },
     }
-    </script>
+  </script>
     
     <style lang="sass">
     .no-tasks
