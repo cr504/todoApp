@@ -3,7 +3,7 @@ const router = express.Router();
 
 const TaskController = require("../controllers/task");
 
-router.get("/task/add/:listId", (req, res) => {
+router.post("/task/add/:listId", (req, res) => {
   try {
     const taskController = new TaskController();
     const listId = parseInt(req.params.listId);

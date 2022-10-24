@@ -140,11 +140,14 @@
   </template>
     
 <script>
+import axios from 'axios';
+
   export default {
     data: () => ({   
-      baseUrl: "http://localhost:3000",     
+      serverUrl: "http://localhost:3000",     
       dialog: false,
       listId: null,
+      errors: [],
       dialogDelete: false,
       headers: [
         {
@@ -190,7 +193,8 @@
     },
 
     created () {
-      this.initialize()
+        this.listId = this.$route.params.id;
+      //TODO DELETE THIS this.initialize()
     },
 
     methods: {
@@ -250,14 +254,18 @@
               Object.assign(this.tasks[this.editedIndex], this.editedItem)
           }
           // Adding a task
-          else {
-              //this.tasks.push(this.editedItem)
-              axios.post(`${this.baseUrl}/task`, {
-                  title: this.newTodoTitle,
+          else {                        
+                const addPath = `${this.serverUrl}/task/add/${this.listId}`;    
+               axios.post(`${addPath}`, {
+                taskId: this.tasks.length + 1,
+                    listId: this.listId,
+                    description: this.editedItem.description,
+                    dueDate: this.editedItem.dueDate,
+                    priority: this.editedItem.priority,
+                    isComplete: this.editedItem.isComplete,
               })
-                  .then(response => {
-                      this.newTodoTitle = ''
-                      this.todos = response.data
+                  .then(response => {                      
+                      this.tasks = response.data
                   })
                   .catch(e => {
                       this.errors.push(e)
