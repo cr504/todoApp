@@ -16,7 +16,7 @@
             </v-list-item-content>            
 
             <v-list-item-action>
-              <v-btn @click.stop="deleteTodo(todo.id)" icon>
+              <v-btn @click.stop="deleteTodo(todo.id, todo.title)" icon>
                 <v-icon color="red">mdi-delete</v-icon>
               </v-btn>
             </v-list-item-action>
@@ -77,8 +77,14 @@ import axios from 'axios';
       })                  
     },
 
-    deleteTodo(id) {
-      this.todos = this.todos.filter(todo => todo.id !== id)
+    deleteTodo(id, title) {
+      if (confirm(`Delete todo ${title}?`)) {
+        const deletePath = `${this.baseUrl}/todo/delete/${id}`;
+        axios.get(`${deletePath}`)
+        .then(response => {
+          this.todos = response.data
+        })        
+      }      
     },
   }
 }
