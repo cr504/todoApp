@@ -12,7 +12,7 @@
           <template v-slot:default>     
             
             <v-list-item-content>
-              <v-list-item-title><a href="http://localhost:8080/#/task">{{todo.title}}</a></v-list-item-title>
+              <v-list-item-title  v-on:click="redirectTo(todo.id)">{{todo.title}}</v-list-item-title>              
             </v-list-item-content>            
 
             <v-list-item-action>
@@ -45,7 +45,8 @@ import axios from 'axios';
   export default {    
     data() {
       return {
-        baseUrl: "http://localhost:3000",
+        serverUrl: "http://localhost:3000",
+        uiUrl: "http://localhost:8080",
         newTodoTitle: '', 
         todos: [],
         errors: []      
@@ -54,7 +55,7 @@ import axios from 'axios';
 
   created() {
     // Get all todos on created
-    axios.get(`${this.baseUrl}/todos`)
+    axios.get(`${this.serverUrl}/todos`)
     .then(response => {
       this.todos = response.data
     })
@@ -64,8 +65,12 @@ import axios from 'axios';
   },
 
   methods: {    
+    redirectTo(todoId){
+      window.location.href=this.uiUrl + "/#/task/" + todoId;
+    },
+
     addTodo() {      
-      axios.post(`${this.baseUrl}/todo`, {
+      axios.post(`${this.serverUrl}/todo`, {
         title: this.newTodoTitle,
       })
       .then(response => {
@@ -79,7 +84,7 @@ import axios from 'axios';
 
     deleteTodo(id, title) {
       if (confirm(`Delete todo ${title}?`)) {
-        const deletePath = `${this.baseUrl}/todo/delete/${id}`;
+        const deletePath = `${this.serverUrl}/todo/delete/${id}`;
         axios.get(`${deletePath}`)
         .then(response => {
           this.todos = response.data

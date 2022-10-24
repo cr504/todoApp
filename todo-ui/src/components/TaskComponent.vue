@@ -139,123 +139,137 @@
     </v-data-table> 
   </template>
     
-    <script>
-    export default {
-      data: () => ({        
-        dialog: false,
-        listId: null,
-        dialogDelete: false,
-        headers: [
+<script>
+  export default {
+    data: () => ({   
+      baseUrl: "http://localhost:3000",     
+      dialog: false,
+      listId: null,
+      dialogDelete: false,
+      headers: [
+        {
+          text: 'Description',
+          align: 'start',
+          sortable: false,
+          value: 'description',
+        },
+        { text: 'Due Date', value: 'dueDate' },
+        { text: 'Priority', value: 'priority' },
+        { text: 'Complete', value: 'isComplete' },          
+        { text: 'Actions', value: 'actions', sortable: false },
+      ],
+      tasks: [],
+      editedIndex: -1,
+      editedItem: {
+       description: '',
+        dueDate: null,
+        priority: "",
+        isComplete: null,          
+      },
+      defaultItem: {
+      description: '',
+        dueDate: null,
+        priority: "",
+        isComplete: null,          
+      },
+    }),
+
+    computed: {
+      formTitle () {
+        return this.editedIndex === -1 ? 'New Task' : 'Edit Task'
+      },
+    },
+
+    watch: {
+      dialog (val) {
+        val || this.close()
+      },
+      dialogDelete (val) {
+        val || this.closeDelete()
+      },
+    },
+
+    created () {
+      this.initialize()
+    },
+
+    methods: {
+      initialize () {
+        this.tasks = [
           {
-            text: 'Description',
-            align: 'start',
-            sortable: false,
-            value: 'description',
+            description: 'Task 1',
+            dueDate: '10/19/22',
+            priority: "High",
+            isComplete: false,              
           },
-          { text: 'Due Date', value: 'dueDate' },
-          { text: 'Priority', value: 'priority' },
-          { text: 'Complete', value: 'isComplete' },          
-          { text: 'Actions', value: 'actions', sortable: false },
-        ],
-        tasks: [],
-        editedIndex: -1,
-        editedItem: {
-         description: '',
-          dueDate: null,
-          priority: "",
-          isComplete: null,          
-        },
-        defaultItem: {
-        description: '',
-          dueDate: null,
-          priority: "",
-          isComplete: null,          
-        },
-      }),
-  
-      computed: {
-        formTitle () {
-          return this.editedIndex === -1 ? 'New Task' : 'Edit Task'
-        },
+          {
+            description: 'Task 2',
+            dueDate: '10/19/22',
+            priority: "Low",
+            isComplete: false,              
+          },      
+        ]
       },
-  
-      watch: {
-        dialog (val) {
-          val || this.close()
-        },
-        dialogDelete (val) {
-          val || this.closeDelete()
-        },
+
+      editItem (item) {
+        this.editedIndex = this.tasks.indexOf(item)
+        this.editedItem = Object.assign({}, item)
+        this.dialog = true
       },
-  
-      created () {
-        this.initialize()
+
+      deleteItem (item) {
+        this.editedIndex = this.tasks.indexOf(item)
+        this.editedItem = Object.assign({}, item)
+        this.dialogDelete = true
       },
-  
-      methods: {
-        initialize () {
-          this.tasks = [
-            {
-              description: 'Task 1',
-              dueDate: '10/19/22',
-              priority: "High",
-              isComplete: false,              
-            },
-            {
-              description: 'Task 2',
-              dueDate: '10/19/22',
-              priority: "Low",
-              isComplete: false,              
-            },      
-          ]
-        },
-  
-        editItem (item) {
-          this.editedIndex = this.tasks.indexOf(item)
-          this.editedItem = Object.assign({}, item)
-          this.dialog = true
-        },
-  
-        deleteItem (item) {
-          this.editedIndex = this.tasks.indexOf(item)
-          this.editedItem = Object.assign({}, item)
-          this.dialogDelete = true
-        },
-  
-        deleteItemConfirm () {
-          this.tasks.splice(this.editedIndex, 1)
-          this.closeDelete()
-        },
-  
-        close () {
-          this.dialog = false
-          this.$nextTick(() => {
-            this.editedItem = Object.assign({}, this.defaultItem)
-            this.editedIndex = -1
-          })
-        },
-  
-        closeDelete () {
-          this.dialogDelete = false
-          this.$nextTick(() => {
-            this.editedItem = Object.assign({}, this.defaultItem)
-            this.editedIndex = -1
-          })
-        },
-  
-        save () {
+
+      deleteItemConfirm () {
+        this.tasks.splice(this.editedIndex, 1)
+        this.closeDelete()
+      },
+
+      close () {
+        this.dialog = false
+        this.$nextTick(() => {
+          this.editedItem = Object.assign({}, this.defaultItem)
+          this.editedIndex = -1
+        })
+      },
+
+      closeDelete () {
+        this.dialogDelete = false
+        this.$nextTick(() => {
+          this.editedItem = Object.assign({}, this.defaultItem)
+          this.editedIndex = -1
+        })
+      },
+
+      save() {
+          // Editing a task
           if (this.editedIndex > -1) {
-            Object.assign(this.tasks[this.editedIndex], this.editedItem)
-          } else {
-            this.tasks.push(this.editedItem)
+              Object.assign(this.tasks[this.editedIndex], this.editedItem)
+          }
+          // Adding a task
+          else {
+              //this.tasks.push(this.editedItem)
+              axios.post(`${this.baseUrl}/task`, {
+                  title: this.newTodoTitle,
+              })
+                  .then(response => {
+                      this.newTodoTitle = ''
+                      this.todos = response.data
+                  })
+                  .catch(e => {
+                      this.errors.push(e)
+                  })
           }
           this.close()
-        },
       },
-    }
-  </script>
+  },
+}
+</script>
     
-    <style lang="sass">
+<style lang="sass">
     .no-tasks
       position: absolute
       left: 50%

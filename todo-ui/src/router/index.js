@@ -11,7 +11,7 @@ const routes = [
     component: TodoView
   },
   {
-    path: '/task',
+    path: '/task/:id',
     name: 'task',
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
