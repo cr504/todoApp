@@ -12,7 +12,7 @@
           <template v-slot:default>     
             
             <v-list-item-content>
-              <v-list-item-title  v-on:click="redirectTo(todo.id)">{{todo.title}}</v-list-item-title>              
+              <v-list-item-title  v-on:click="redirectToTasks(todo.id)">{{todo.title}}</v-list-item-title>              
             </v-list-item-content>            
 
             <v-list-item-action>
@@ -65,7 +65,7 @@ import axios from 'axios';
   },
 
   methods: {    
-    redirectTo(todoId){
+    redirectToTasks(todoId){
       window.location.href=this.uiUrl + "/#/task/" + todoId;
     },
 
