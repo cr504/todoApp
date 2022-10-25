@@ -7,6 +7,9 @@
                 <v-spacer></v-spacer>
                 <v-dialog v-model="dialog" max-width="500px">
                     <template v-slot:activator="{ on, attrs }">
+                        <v-btn color="primary" dark class="mb-2 ml-2" v-bind="attrs" v-on:click="redirectToTodos()">
+                            Close
+                        </v-btn>
                         <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on">
                             New Task
                         </v-btn>
@@ -45,11 +48,12 @@
                                                 <v-btn text color="primary" @click="menu = false">
                                                     Cancel
                                                 </v-btn>
-                                                <v-btn text color="primary" @click="$refs.menu.save(editedItem.dueDate)">
+                                                <v-btn text color="primary"
+                                                    @click="$refs.menu.save(editedItem.dueDate)">
                                                     OK
                                                 </v-btn>
                                             </v-date-picker>
-                                        </v-menu>                                        
+                                        </v-menu>
                                     </v-col>
                                 </v-row>
                             </v-container>
@@ -96,6 +100,7 @@ import axios from 'axios';
 export default {
     data: () => ({
         serverUrl: "http://localhost:3000",
+        uiUrl: "http://localhost:8080",
         dialog: false,
         listId: null,
         errors: [],
@@ -131,7 +136,7 @@ export default {
         date: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
         menu: false,
         modal: false,
-        menu2: false,        
+        menu2: false,
     }),
 
     computed: {
@@ -139,7 +144,7 @@ export default {
             return this.editedIndex === -1 ? 'New Task' : 'Edit Task'
         },
 
-        allRequiredTaskFieldsValid(){
+        allRequiredTaskFieldsValid() {
             const isValid = (this.editedItem.description !== '' && this.editedItem.priority && this.editedItem.isComplete !== null && this.editedItem.dueDate)
             return isValid;
         }
@@ -171,6 +176,10 @@ export default {
                 .catch(e => {
                     this.errors.push(e)
                 })
+        },
+
+        redirectToTodos(todoId) {
+            window.location.href = this.uiUrl + "/#/";
         },
 
         editItem(item) {
@@ -215,7 +224,7 @@ export default {
             })
         },
 
-        save() {           
+        save() {
             // Editing a task
             if (this.editedIndex > -1) {
                 const editPath = `${this.serverUrl}/task/edit/${this.editedItem.taskId}`;
