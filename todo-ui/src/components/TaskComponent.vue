@@ -27,10 +27,10 @@
                                         <v-text-field v-model="editedItem.dueDate" label="Due Date"></v-text-field>
                                     </v-col>
                                     <v-col cols="12" sm="6" md="4">
-                                        <v-text-field v-model="editedItem.priority" label="Priority"></v-text-field>
+                                        <v-select v-model="editedItem.priority" :items="priorityChoices" label="Priority"></v-select>                                        
                                     </v-col>
                                     <v-col cols="12" sm="6" md="4">
-                                        <v-text-field v-model="editedItem.isComplete" label="Complete"></v-text-field>
+                                        <v-select v-model="editedItem.isComplete" :items="completeChoices" label="Complete"></v-select>                                        
                                     </v-col>
                                     <v-col cols="12" sm="6" md="4">
                                     </v-col>
@@ -82,6 +82,8 @@ export default {
         dialog: false,
         listId: null,
         errors: [],
+        priorityChoices: ["High", "Medium","Low"],
+        completeChoices: [false, true],
         dialogDelete: false,
         headers: [
             {

@@ -30,8 +30,7 @@ class TasksModel {
       const taskName = body.description;
       let tasks = this._getAllTasks();
       const newTaskId = tasks.length + 1;
-      const isComplete =
-        body.isComplete.toLowerCase() === "false" ? false : true;
+      const isComplete = body.isComplete;
       const newTask = {
         taskId: newTaskId,
         listId: parseInt(listId),
