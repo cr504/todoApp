@@ -60,7 +60,7 @@
                             <v-btn color="blue darken-1" text @click="close">
                                 Cancel
                             </v-btn>
-                            <v-btn color="blue darken-1" text @click="save">
+                            <v-btn :disabled="!allRequiredTaskFieldsValid" color="blue darken-1" text @click="save">
                                 Save
                             </v-btn>
                         </v-card-actions>
@@ -131,13 +131,18 @@ export default {
         date: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
         menu: false,
         modal: false,
-        menu2: false,
+        menu2: false,        
     }),
 
     computed: {
         formTitle() {
             return this.editedIndex === -1 ? 'New Task' : 'Edit Task'
         },
+
+        allRequiredTaskFieldsValid(){
+            const isValid = (this.editedItem.description !== '' && this.editedItem.priority && this.editedItem.isComplete !== null && this.editedItem.dueDate)
+            return isValid;
+        }
     },
 
     watch: {
@@ -210,7 +215,7 @@ export default {
             })
         },
 
-        save() {
+        save() {           
             // Editing a task
             if (this.editedIndex > -1) {
                 const editPath = `${this.serverUrl}/task/edit/${this.editedItem.taskId}`;
