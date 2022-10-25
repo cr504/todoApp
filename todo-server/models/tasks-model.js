@@ -96,8 +96,7 @@ class TasksModel {
       let tasks = this._getAllTasks();
       const _taskId = taskId;
       const _listId = parseInt(body.listId);
-      const _isComplete =
-        body.isComplete.toLowerCase() === "false" ? false : true;
+      const _isComplete = body.isComplete;
 
       const editedTask = {
         taskId: _taskId,
@@ -116,6 +115,7 @@ class TasksModel {
       });
       // Save the tasks data to file
       this.tasksDataService._saveToFile(tasks);
+      tasks = tasks.filter(task => task.listId === _listId);       
       return tasks;
     } catch (error) {
       const errorMsg = `Tasks-Model: GET _editTask failed ${error}`;

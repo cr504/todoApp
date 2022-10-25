@@ -181,8 +181,22 @@ export default {
         save() {
             // Editing a task
             if (this.editedIndex > -1) {
-                Object.assign(this.tasks[this.editedIndex], this.editedItem)
-            }
+                const editPath = `${this.serverUrl}/task/edit/${this.listId}`;
+                axios.post(`${editPath}`, {
+                    taskId: this.editedItem.taskId,
+                    listId: this.listId,
+                    description: this.editedItem.description,
+                    dueDate: this.editedItem.dueDate,
+                    priority: this.editedItem.priority,
+                    isComplete: this.editedItem.isComplete,
+                })
+                    .then(response => {
+                        this.tasks = response.data
+                    })
+                    .catch(e => {
+                        this.errors.push(e)
+                    })
+            }            
             // Adding a task
             else {
                 const addPath = `${this.serverUrl}/task/add/${this.listId}`;
