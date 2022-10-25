@@ -1,6 +1,7 @@
 # todo-ui
 
 ## Project setup
+Open a terminal in the todo-ui directory then run the following 
 ```
 npm install
 ```
@@ -9,6 +10,8 @@ npm install
 ```
 npm run serve
 ```
+
+Go to *http://localhost:8080*
 
 ### Compiles and minifies for production
 ```
