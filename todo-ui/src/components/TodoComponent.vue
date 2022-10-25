@@ -12,7 +12,7 @@
           <template v-slot:default>     
             
             <v-list-item-content>
-              <v-list-item-title  v-on:click="redirectToTasks(todo.id)">{{todo.title}}</v-list-item-title>              
+              <v-list-item-title :class="{'text-decoration-line-through': (todo?.numCompleted === todo?.tasks?.length && todo?.tasks?.length > 0)}"  v-on:click="redirectToTasks(todo.id)">{{todo.title}} ({{todo?.numCompleted}} / {{todo?.tasks?.length}})</v-list-item-title>              
             </v-list-item-content>            
 
             <v-list-item-action>
@@ -49,7 +49,7 @@ import axios from 'axios';
         uiUrl: "http://localhost:8080",
         newTodoTitle: '', 
         todos: [],
-        errors: []      
+        errors: [],              
     }
   },
 
