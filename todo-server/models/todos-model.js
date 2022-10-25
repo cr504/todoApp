@@ -39,9 +39,10 @@ class TodosModel {
    */
   _addTodo(newTodo) {
     try {
-      const _todosData = this.todosDataService._getTodosDataFromFile();
+      let _todosData = this.todosDataService._getTodosDataFromFile();
       _todosData.push(newTodo);
       this.todosDataService._saveToFile(_todosData);
+      _todosData = this._getTodosWTasks();
       return _todosData;
     } catch (error) {
       const errorMsg = `Todos-Model: POST _addTodo failed ${error}`;
