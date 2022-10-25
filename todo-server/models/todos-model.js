@@ -2,8 +2,8 @@ const TasksDataService = require("../services/tasks-data-service");
 const TodosDataService = require("../services/todos-data-service");
 
 class TodosModel {
-  constructor() {
-    this.tasksDataService = new TasksDataService();
+  constructor() {    
+    this.tasksDataService = TasksDataService;
     this.todosDataService = new TodosDataService();
   }
 
@@ -39,7 +39,7 @@ class TodosModel {
    */
   _addTodo(newTodo) {
     try {
-      let _todosData = this.todosDataService._getTodosDataFromFile();
+      let _todosData = this.todosDataService._getTodosDataFromFile();      
       _todosData.push(newTodo);
       this.todosDataService._saveToFile(_todosData);
       _todosData = this._getTodosWTasks();

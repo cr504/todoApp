@@ -2,7 +2,7 @@ const TasksDataService = require('../services/tasks-data-service');
 
 class TasksModel {
   constructor() {
-    this.tasksDataService = new TasksDataService();
+    this.tasksDataService = TasksDataService;
   }
 
   /**
@@ -11,7 +11,7 @@ class TasksModel {
   _getAllTasks() {
     try {
       // read taskData from file
-      const _tasksData = this.tasksDataService._getTasksDataFromFile();
+      const _tasksData = this.tasksDataService._getTasksDataFromFile();      
       return _tasksData;
     } catch (error) {
       const errorMsg = `Tasks-Model: GET _getAllTasks failed ${error}`;

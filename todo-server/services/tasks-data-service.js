@@ -30,4 +30,4 @@ class TasksDataService {
   }
 }
 
-module.exports = TasksDataService;
+module.exports = new TasksDataService();

@@ -9,7 +9,7 @@ class TodoController {
     this.todosModel = new TodosModel();
     this.todosDataService = new TodosDataService();
     this.tasksModel = new TasksModel();
-    this.tasksDataService = new TasksDataService();
+    this.tasksDataService = TasksDataService;
   }
 
   /**
