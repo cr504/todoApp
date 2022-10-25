@@ -133,7 +133,7 @@ export default {
 
     methods: {
         initialize() {            
-            // Get all the tasks by id
+            // Get all the tasks by listId
             const getTasksPath = `${this.serverUrl}/task/${this.listId}`;
             axios.get(`${getTasksPath}`, {               
             })
@@ -157,8 +157,17 @@ export default {
             this.dialogDelete = true
         },
 
-        deleteItemConfirm() {
-            this.tasks.splice(this.editedIndex, 1)
+        deleteItemConfirm() {            
+            const deletePath = `${this.serverUrl}/task/delete/${this.listId}/${this.editedItem.taskId}`;
+                axios.delete(`${deletePath}`, {                    
+                    listId: this.listId,                    
+                })
+                    .then(response => {
+                        this.tasks = response.data
+                    })
+                    .catch(e => {
+                        this.errors.push(e)
+                    })
             this.closeDelete()
         },
 

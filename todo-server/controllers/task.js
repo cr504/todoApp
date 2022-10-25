@@ -40,9 +40,9 @@ class TaskController {
    * Deletes a task from the tasks array
    * @params {*} taskId
    */
-  _deleteTaskByTaskId(taskId) {
+  _deleteTaskByTaskId(listId, taskId) {
     try {
-      const tasks = this.tasksModel._deleteTaskByTaskId(taskId);
+      const tasks = this.tasksModel._deleteTaskByTaskId(listId, taskId);
       return tasks;
     } catch (error) {
       const errorMsg = `taskController: _deleteTaskByTaskId failed ${error}`;

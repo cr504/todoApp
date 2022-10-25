@@ -69,14 +69,17 @@ class TasksModel {
   }
 
   /**
+   * Deletes a task by the listId and taskId
    * @params {*} taskId
    */
-  _deleteTaskByTaskId(taskId) {
+  _deleteTaskByTaskId(listId, taskId) {
     try {
       let tasks = this._getAllTasks();
-      tasks = tasks.filter((task) => task.taskId !== taskId);
+      const taskToDelete = tasks.find(task => task.listId === listId && task.taskId === taskId);
+      tasks = tasks.filter((task) => task !== taskToDelete);
       // Save the tasks data to file
       this.tasksDataService._saveToFile(tasks);
+      tasks = tasks.filter(task => task.listId === listId);
       return tasks;
     } catch (error) {
       const errorMsg = `Tasks-Model: GET _deleteTaskByTaskId failed ${error}`;

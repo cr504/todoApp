@@ -30,13 +30,13 @@ router.get("/task/:listId", (req, res) => {
   }
 });
 
-router.get("/task/delete/:taskId", (req, res) => {
+router.delete("/task/delete/:listId/:taskId", (req, res) => {
   try {
-    const taskController = new TaskController();
-    const tasks = taskController._deleteTaskByTaskId(parseInt(req.params.taskId));
+    const taskController = new TaskController();    
+    const tasks = taskController._deleteTaskByTaskId(parseInt(req.params.listId), parseInt(req.params.taskId));
     return res.status(200).send(tasks);
   } catch (error) {
-    const errorMsg = `server: GET task/delete/:taskId failed ${error}`;
+    const errorMsg = `server: GET task/delete/:listId/:taskId failed ${error}`;
     console.log(errorMsg);
     res.status(500).send(errorMsg);
   }
