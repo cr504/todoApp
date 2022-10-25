@@ -24,15 +24,32 @@
                                         </v-text-field>
                                     </v-col>
                                     <v-col cols="12" sm="6" md="4">
-                                        <v-text-field v-model="editedItem.dueDate" label="Due Date"></v-text-field>
+                                        <v-select v-model="editedItem.priority" :items="priorityChoices"
+                                            label="Priority"></v-select>
                                     </v-col>
                                     <v-col cols="12" sm="6" md="4">
-                                        <v-select v-model="editedItem.priority" :items="priorityChoices" label="Priority"></v-select>                                        
+                                        <v-select v-model="editedItem.isComplete" :items="completeChoices"
+                                            label="Complete"></v-select>
                                     </v-col>
                                     <v-col cols="12" sm="6" md="4">
-                                        <v-select v-model="editedItem.isComplete" :items="completeChoices" label="Complete"></v-select>                                        
-                                    </v-col>
-                                    <v-col cols="12" sm="6" md="4">
+                                        <v-menu ref="menu" v-model="menu" :close-on-content-click="false"
+                                            :return-value.sync="date" transition="scale-transition" offset-y
+                                            min-width="auto">
+                                            <template v-slot:activator="{ on, attrs }">
+                                                <v-text-field v-model="editedItem.dueDate" label="Due Date"
+                                                    prepend-icon="mdi-calendar" readonly v-bind="attrs" v-on="on">
+                                                </v-text-field>
+                                            </template>
+                                            <v-date-picker v-model="editedItem.dueDate" no-title scrollable>
+                                                <v-spacer></v-spacer>
+                                                <v-btn text color="primary" @click="menu = false">
+                                                    Cancel
+                                                </v-btn>
+                                                <v-btn text color="primary" @click="$refs.menu.save(editedItem.dueDate)">
+                                                    OK
+                                                </v-btn>
+                                            </v-date-picker>
+                                        </v-menu>                                        
                                     </v-col>
                                 </v-row>
                             </v-container>
@@ -82,7 +99,7 @@ export default {
         dialog: false,
         listId: null,
         errors: [],
-        priorityChoices: ["High", "Medium","Low"],
+        priorityChoices: ["High", "Medium", "Low"],
         completeChoices: [false, true],
         dialogDelete: false,
         headers: [
@@ -111,6 +128,10 @@ export default {
             priority: "",
             isComplete: null,
         },
+        date: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
+        menu: false,
+        modal: false,
+        menu2: false,
     }),
 
     computed: {
@@ -134,17 +155,17 @@ export default {
     },
 
     methods: {
-        initialize() {            
+        initialize() {
             // Get all the tasks by listId
             const getTasksPath = `${this.serverUrl}/task/${this.listId}`;
-            axios.get(`${getTasksPath}`, {               
+            axios.get(`${getTasksPath}`, {
             })
                 .then(response => {
                     this.tasks = response.data
                 })
                 .catch(e => {
                     this.errors.push(e)
-                })       
+                })
         },
 
         editItem(item) {
@@ -159,17 +180,17 @@ export default {
             this.dialogDelete = true
         },
 
-        deleteItemConfirm() {            
+        deleteItemConfirm() {
             const deletePath = `${this.serverUrl}/task/delete/${this.listId}/${this.editedItem.taskId}`;
-                axios.delete(`${deletePath}`, {                    
-                    listId: this.listId,                    
+            axios.delete(`${deletePath}`, {
+                listId: this.listId,
+            })
+                .then(response => {
+                    this.tasks = response.data
                 })
-                    .then(response => {
-                        this.tasks = response.data
-                    })
-                    .catch(e => {
-                        this.errors.push(e)
-                    })
+                .catch(e => {
+                    this.errors.push(e)
+                })
             this.closeDelete()
         },
 
@@ -207,7 +228,7 @@ export default {
                     .catch(e => {
                         this.errors.push(e)
                     })
-            }            
+            }
             // Adding a task
             else {
                 const addPath = `${this.serverUrl}/task/add/${this.listId}`;
