@@ -190,7 +190,7 @@ export default {
         save() {
             // Editing a task
             if (this.editedIndex > -1) {
-                const editPath = `${this.serverUrl}/task/edit/${this.listId}`;
+                const editPath = `${this.serverUrl}/task/edit/${this.editedItem.taskId}`;
                 axios.post(`${editPath}`, {
                     taskId: this.editedItem.taskId,
                     listId: this.listId,
