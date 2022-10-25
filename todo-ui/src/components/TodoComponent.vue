@@ -4,7 +4,7 @@
     v-model="newTodoTitle"
     @click:append="addTodo"
     @keyup.enter="addTodo"
-    class="pa-3" outlined label="Add Todo" 
+    class="pa-3" outlined label="Add To-do" 
     append-icon="mdi-plus-thick" hide-details clearable></v-text-field>
     <v-list v-if="todos.length" class="pt-0" flat>
       <div v-for="todo in todos" :key="todo.id">
@@ -34,7 +34,7 @@
     >
       mdi-check
     </v-icon>
-      <div class="text-h5 primary--text">No todos</div>
+      <div class="text-h5 primary--text">No To-dos</div>
     </div>
   </div>
 </template>
