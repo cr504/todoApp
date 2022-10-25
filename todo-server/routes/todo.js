@@ -19,9 +19,9 @@ router.get("/todo/:id", (req, res) => {
 });
 
 /**
- * GET todos array after the todo object has been deleted from todos
+ * DELETE todo with the listId from todo data
  */
- router.get("/todo/delete/:listId", (req, res) => {
+ router.delete("/todo/delete/:listId", (req, res) => {
     try {
       const todoController = new TodoController();
       const todo = todoController._deleteTodoById(req.params.listId);

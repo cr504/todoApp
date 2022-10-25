@@ -85,7 +85,7 @@ import axios from 'axios';
     deleteTodo(id, title) {
       if (confirm(`Delete todo ${title}?`)) {
         const deletePath = `${this.serverUrl}/todo/delete/${id}`;
-        axios.get(`${deletePath}`)
+        axios.delete(`${deletePath}`)
         .then(response => {
           this.todos = response.data
         })        
