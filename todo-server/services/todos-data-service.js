@@ -30,4 +30,4 @@ class TodosDataService {
   }
 }
 
-module.exports = TodosDataService;
+module.exports = new TodosDataService();

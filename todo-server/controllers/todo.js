@@ -7,7 +7,7 @@ const TasksDataService = require("../services/tasks-data-service");
 class TodoController {
   constructor() {
     this.todosModel = new TodosModel();
-    this.todosDataService = new TodosDataService();
+    this.todosDataService = TodosDataService;
     this.tasksModel = new TasksModel();
     this.tasksDataService = TasksDataService;
   }
